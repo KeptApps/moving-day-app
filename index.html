@@ -227,7 +227,7 @@ const I={
   x:`<svg viewBox="0 0 24 24" ${P}><path d="M6 6l12 12M18 6L6 18"/></svg>`,
   arrow:`<svg viewBox="0 0 24 24" ${P}><path d="M5 12h13M13 6l6 6-6 6"/></svg>`
 };
-const NAV=[['home','Overview'],['timeline','Timeline'],['boxes','Boxes'],['budget','Budget'],['utilities','Utilities'],['dayplan','Move day'],['fit','Will it fit'],['newhome','New home'],['address','Address'],['contacts','Contacts']];
+const NAV=[['home','Overview'],['timeline','Timeline'],['boxes','Boxes'],['budget','Budget'],['utilities','Utilities'],['dayplan','Move day'],['fit','Doorway check'],['newhome','New home'],['address','Address'],['contacts','Contacts']];
 const PHASES=[
   ['p8','8+ weeks out',42,99999],['p6','6 weeks out',28,41],['p4','4 weeks out',14,27],
   ['p2','2 weeks out',7,13],['p1','Move week',1,6],['pd','Moving day',0,0],['pa','After the move',-99999,-1]
@@ -240,10 +240,10 @@ const T_DEF=[
   ['p8','Confirm your moving date'],['p8','Set a moving budget'],['p8','Research moving companies'],['p8','Get at least three quotes'],
   ['p8','Declutter one room at a time'],['p8','Book time off work'],['p8','Check your notice period or completion date'],['p8','Start a folder for moving documents'],
   ['p6','Book the movers or hire a truck'],['p6','Order boxes and packing supplies'],['p6','Pack things you rarely use'],
-  ['p6','Measure doorways and the new rooms'],['p6','Request school or nursery record transfers'],['p6','Arrange care for kids or pets on the day'],
-  ['p4','Give written notice to your landlord or agent'],['p4','Book the lift or parking permit'],['p4','Set utility switch dates'],
+  ['p6','Measure doorways and the new rooms'],['p6','Request school or daycare record transfers'],['p6','Arrange care for kids or pets on the day'],
+  ['p4','Give written notice to your landlord or agent'],['p4','Book the elevator or parking permit'],['p4','Set utility switch dates'],
   ['p4','Start eating through the freezer'],['p4','Book end-of-tenancy or move-out cleaning'],['p4','Sort the donate and sell pile'],
-  ['p2','Confirm mover details, times and payment'],['p2','Pack room by room, labelling as you go'],['p2','Number every box and log the contents'],
+  ['p2','Confirm mover details, times and payment'],['p2','Pack room by room, labeling as you go'],['p2','Number every box and log the contents'],
   ['p2','Back up your computer and photos'],['p2','Refill prescriptions'],['p2','Cancel or transfer local memberships'],
   ['p1','Pack the essentials box'],['p1','Defrost and clean the fridge'],['p1','Confirm the arrival time and new address'],
   ['p1','Pack a bag with three days of clothes'],['p1','Photograph cable setups before unplugging'],['p1','Get cash for tips and small costs'],
@@ -254,9 +254,9 @@ const T_DEF=[
 ];
 const U_DEF=[['Electricity','Electricity'],['Gas','Gas'],['Water','Water'],['Internet','Internet'],['Mobile phone','Phone'],['Trash and recycling','Trash'],['Home insurance','Insurance']];
 const A_DEF=[
-  ['Government','Driving licence or ID'],['Government','Voter registration'],['Government','Tax office'],['Government','Post office mail forwarding'],
+  ['Government','Driver license or ID'],['Government','Voter registration'],['Government','Tax office'],['Government','Post office mail forwarding'],
   ['Finance','Bank and credit cards'],['Finance','Loans or mortgage'],['Finance','Insurance policies'],['Finance','Pension or investments'],
-  ['Work & school','Employer or HR'],['Work & school','School, college or nursery'],
+  ['Work & school','Employer or HR'],['Work & school','School, college or daycare'],
   ['Home','Landlord or estate agent'],['Home','Home security or alarm company'],
   ['Health','Doctor and dentist'],['Health','Pharmacy'],['Health','Vet'],
   ['Subscriptions','Online shops and deliveries'],['Subscriptions','Streaming services'],['Subscriptions','Gym or clubs']
@@ -267,10 +267,10 @@ const SCHED_DEF=[['07:30','Strip the beds and pack the last bedding'],['08:00','
 const METER_DEF=['Electricity','Gas','Water'];
 const DOC_DEF=['Passports and ID','Tenancy or sale paperwork','Insurance documents','Birth certificates','School records','Medical records and prescriptions','Vehicle documents','Moving company contract','Keys and spare keys','Chargers and power bank'];
 const NIGHT_DEF=['Find the toilet paper and soap','Plug in and switch on the fridge','Make up every bed','Check the smoke alarms work','Find the fuse box and the water stopcock','Order food, do not attempt to cook','Check every door and window locks','Put a lamp in each room you will use'];
-const WEEK_DEF=['Find the bin and recycling collection days','Register with a doctor and dentist','Locate the nearest pharmacy and supermarket','Update the local council or city registration','Change the locks if you have any doubt','Test the heating and hot water properly','Find the nearest parking rules or permit office','Say hello to the neighbours'];
-const FACT_DEF=['Bin and recycling day','Water stopcock','Fuse box','Boiler or heating controls','Meter locations','Wi-Fi network name','Parking rules','Landlord or agent','Nearest pharmacy','Rubbish tip or recycling centre'];
+const WEEK_DEF=['Find the trash and recycling collection days','Register with a doctor and dentist','Locate the nearest pharmacy and supermarket','Update the local council or city registration','Change the locks if you have any doubt','Test the heating and hot water properly','Find the nearest parking rules or permit office','Say hello to the neighbors'];
+const FACT_DEF=['Trash and recycling day','Water stopcock','Fuse box','Boiler or heating controls','Meter locations','Wi-Fi network name','Parking rules','Landlord or agent','Nearest pharmacy','Recycling center or dump'];
 const UNPACK_DEF=['Bedrooms','Bathroom','Kitchen','Living room','Everything else'];
-const CURRENCIES=['$','€','£','C$','A$','₹','Rs','R$','kr','CHF','¥','zł'];
+const CURRENCIES=[['$','USD $'],['€','EUR €'],['£','GBP £'],['C$','CAD C$'],['A$','AUD A$'],['₹','INR ₹'],['Rs','PKR Rs'],['R$','BRL R$'],['kr','SEK kr'],['CHF','CHF'],['¥','JPY ¥'],['zł','PLN zł']];
 
 function fresh(){
   const d=new Date(); d.setDate(d.getDate()+45);
@@ -286,7 +286,7 @@ function fresh(){
     schedule:SCHED_DEF.map(([time,text])=>({id:uid(),time,text,done:false})),
     meters:METER_DEF.map(name=>({id:uid(),name,old:'',new:''})),
     documents:DOC_DEF.map(text=>({id:uid(),text,done:false})),
-    fits:[],doorway:'',unit:'cm',
+    fits:[],doorway:'',doorHeight:'',unit:'cm',paper:'A4',
     firstNight:NIGHT_DEF.map(text=>({id:uid(),text,done:false})),
     firstWeek:WEEK_DEF.map(text=>({id:uid(),text,done:false})),
     facts:FACT_DEF.map(k=>({id:uid(),k,v:''})),
@@ -454,7 +454,6 @@ function renderBoxes(){
         </div>
         <div class="row"><button class="btn" data-act="printLabels">Print labels</button><button class="btn primary" data-act="addBox">Add box</button></div>
       </div>
-      ${DEMO?'<p class="muted small" style="margin-top:10px"><b>Demo:</b> 6 boxes max, and nothing is saved when you close this page.</p>':''}
       <p class="muted small" style="margin-top:10px">Boxes are numbered automatically. Write the number on all four sides and the top.</p>
     </section>
     <section class="card">
@@ -494,9 +493,9 @@ function renderBudget(){
   const est=S.budget.reduce((a,b)=>a+num(b.est),0), act=S.budget.reduce((a,b)=>a+num(b.actual),0);
   const diff=est-act;
   return `
-  <div class="page-head"><h1>Budget and quotes</h1><p>Compare removal quotes, then track what you planned to spend against what you actually spent.</p></div>
+  <div class="page-head"><h1>Budget and quotes</h1><p>Compare moving quotes, then track what you planned to spend against what you actually spent.</p></div>
   <section class="card">
-    <div class="row between" style="margin-bottom:10px"><h2>Removal quotes</h2><span class="muted small">Tap a row's star to mark the one you chose</span></div>
+    <div class="row between" style="margin-bottom:10px"><h2>Moving quotes</h2><span class="muted small">Tap a row's star to mark the one you chose</span></div>
     <div class="tbl-wrap"><table>
       <tr><th></th><th>Company</th><th class="n">Quote</th><th>Notes</th><th></th></tr>
       ${S.quotes.map(q=>`<tr class="${q.chosen?'chosen':''}">
@@ -645,18 +644,27 @@ function renderDayplan(){
   </div>`;
 }
 function renderFit(){
-  const unit=S.unit||'cm', door=num(S.doorway);
-  const verdict=w=>{if(!door||!w)return['','Set a doorway width'];const r=door-w;return r<0?['fit-no','Too wide by '+Math.abs(r).toFixed(1)+unit]:r<3?['fit-tight','Tight, '+r.toFixed(1)+unit+' to spare']:['fit-ok','Fits, '+r.toFixed(1)+unit+' to spare']};
+  const unit=S.unit||'cm', door=num(S.doorway), dh=num(S.doorHeight);
+  const verdict=f=>{
+    const sides=[num(f.w),num(f.d)].filter(x=>x>0);
+    if(!door||!sides.length)return['','Set a doorway width'];
+    const narrow=Math.min.apply(null,sides), r=door-narrow;
+    if(r<0)return['fit-no','Too wide by '+Math.abs(r).toFixed(1)+unit];
+    if(dh&&num(f.h)>dh&&num(f.h)>door)return['fit-tight','Turn it on its side to get through'];
+    if(r<3)return['fit-tight','Tight, '+r.toFixed(1)+unit+' to spare'];
+    return['fit-ok','Likely fits, '+r.toFixed(1)+unit+' to spare'];
+  };
   return `
-  <div class="page-head"><h1>Will it fit?</h1><p>Measure once now instead of finding out on the stairs. Enter your narrowest doorway, then check each big piece against it.</p></div>
+  <div class="page-head"><h1>Doorway check</h1><p>Measure once now instead of finding out on the stairs. This compares the narrowest side of each item (turning it on its side counts) against your tightest doorway.</p></div>
   <div class="grid g2">
     <section class="card">
       <h2>Your narrowest doorway</h2>
       <div class="form-grid" style="margin-top:8px">
         <div><label class="lbl" for="fDoor">Width</label><input type="number" id="fDoor" step="0.1" value="${S.doorway||''}" data-change="doorway"></div>
         <div><label class="lbl" for="fUnit">Units</label><select id="fUnit" data-change="unit">${['cm','in'].map(u=>`<option ${unit===u?'selected':''}>${u}</option>`).join('')}</select></div>
+        <div><label class="lbl" for="fDoorH">Doorway height (optional)</label><input type="number" id="fDoorH" step="0.1" value="${S.doorHeight||''}" data-change="doorHeight"></div>
       </div>
-      <p class="muted small" style="margin-top:10px">Measure the frame itself, not the gap with the door open. Check stairwell turns and lift doors too.</p>
+      <p class="muted small" style="margin-top:10px">Measure the frame itself, not the gap with the door open. This is a width guide only: stairwell turns, landings, ceiling slopes and elevator depth still need checking by eye.</p>
       <h2 style="margin-top:20px">Add a piece of furniture</h2>
       <div class="form-grid" style="margin-top:8px">
         <div class="wide"><label class="lbl" for="fItem">Item</label><input type="text" id="fItem" placeholder="Corner sofa"></div>
@@ -668,7 +676,7 @@ function renderFit(){
     </section>
     <section class="card">
       <div class="row between" style="margin-bottom:8px"><h2>Your furniture</h2><span class="muted small num">${S.fits.length}</span></div>
-      ${S.fits.length?S.fits.map(f=>{const[cls,txt]=verdict(num(f.w));return `<div class="item">
+      ${S.fits.length?S.fits.map(f=>{const[cls,txt]=verdict(f);return `<div class="item">
         <div class="t"><b>${esc(f.item)}</b><div class="small muted num">${f.w||'?'} × ${f.h||'?'} × ${f.d||'?'} ${unit}</div></div>
         <span class="tag ${cls}">${txt}</span>
         <button class="icon-btn bare" data-act="delFit" data-id="${f.id}">${I.x}</button></div>`}).join('')
@@ -743,7 +751,7 @@ function printWin(title,css,body){
   const w=window.open('','_blank','width=900,height=700');
   if(!w){toast('Your browser blocked the print window. Allow pop-ups and try again.');return null}
   w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${title}</title><style>
-    @page{size:A4;margin:12mm}
+    @page{size:${S.paper==='Letter'?'letter':'A4'};margin:12mm}
     body{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;margin:0;color:#111;font-size:11pt}
     h1{font-size:19pt;margin:0 0 2mm}
     h2{font-size:12pt;margin:7mm 0 2mm;border-bottom:1.5px solid #111;padding-bottom:1.5mm}
@@ -813,7 +821,7 @@ function printLabels(){
     <div class="it">${esc(b.items||'')}</div>
     <div class="ft">${b.fragile?'<b class="fr">FRAGILE</b>':'<span></span>'}<span>${esc(S.toAddr||'')}</span></div></div>`).join('');
   w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Box labels</title><style>
-    @page{size:A4;margin:10mm}
+    @page{size:${S.paper==='Letter'?'letter':'A4'};margin:10mm}
     body{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;margin:0;color:#111}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
     .lb{border:2px solid #111;border-radius:4mm;padding:5mm;height:62mm;display:flex;flex-direction:column;page-break-inside:avoid}
@@ -825,7 +833,7 @@ function printLabels(){
     .fr{border:2px solid #111;padding:1mm 3mm;border-radius:2mm;letter-spacing:.5mm}
     @media print{.no-print{display:none}}
   </style></head><body>
-  <p class="no-print" style="font-size:13px">Print this page, then tape one label to each box. Two labels per row, A4.</p>
+  <p class="no-print" style="font-size:13px">Print this page, then tape one label to each box. Two per row, sized for ${S.paper==='Letter'?'US Letter':'A4'} (change this in Settings).</p>
   <div class="grid">${labels}</div>
   <script>window.onload=function(){window.print()}<\/script></body></html>`);
   w.document.close();
@@ -843,11 +851,12 @@ function settingsModal(){
     <label class="lbl" for="sTo">Moving to</label><input type="text" id="sTo" value="${esc(S.toAddr)}" placeholder="8 New Road, Bristol">
     <label class="lbl" for="sDate">Moving day</label><input type="date" id="sDate" value="${S.moveDate||''}">
     <div class="form-grid" style="margin-top:4px">
-      <div><label class="lbl" for="sCur">Currency</label><select id="sCur">${CURRENCIES.map(c=>`<option ${S.currency===c?'selected':''}>${c}</option>`).join('')}</select></div>
+      <div><label class="lbl" for="sCur">Currency</label><select id="sCur">${CURRENCIES.map(([c,l])=>`<option value="${c}" ${S.currency===c?'selected':''}>${l}</option>`).join('')}</select></div>
+      <div><label class="lbl" for="sPaper">Print paper</label><select id="sPaper" data-change="paper">${['A4','Letter'].map(p=>`<option ${S.paper===p?'selected':''}>${p==='A4'?'A4 (Europe, Asia)':'US Letter'}</option>`).join('')}</select></div>
       <div><label class="lbl" for="sTheme">Appearance</label><select id="sTheme" data-change="theme">${[['auto','Match device'],['light','Light'],['dark','Dark']].map(([v,l])=>`<option value="${v}" ${S.theme===v?'selected':''}>${l}</option>`).join('')}</select></div>
     </div>
     <label class="lbl">Backup</label>
-    <p class="muted small">Everything is stored in this browser only. Export a backup to move it to another device.</p>
+    <p class="muted small">Everything is stored in this browser only. Export a backup to move it to another device. The backup file contains your addresses, contacts and notes in plain text, so keep it somewhere private.</p>
     <div class="row" style="margin-top:9px"><button class="btn" data-act="export">Export backup</button><button class="btn" data-act="import">Import backup</button><button class="btn danger" data-act="reset">Start a new move</button></div>
     <div class="actions"><button class="btn primary" data-act="saveSettings">Save</button></div>`);
 }
@@ -885,6 +894,8 @@ document.addEventListener('change',e=>{
   if(k==='theme'){S.theme=el.value;applyTheme();save();return}
   if(k==='doorway'){S.doorway=num(el.value);save();render();return}
   if(k==='unit'){S.unit=el.value;save();render();return}
+  if(k==='paper'){S.paper=el.value.indexOf('Letter')>-1?'Letter':'A4';save();return}
+  if(k==='doorHeight'){S.doorHeight=num(el.value);save();render();return}
   if(k==='fact'){const x=S.facts.find(y=>y.id===id);if(x){x.v=el.value;save()}return}
   const m=S.meters.find(x=>x.id===id);
   if(k==='mOld'&&m){m.old=el.value;save();return}
