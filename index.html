@@ -177,7 +177,7 @@ td input,td select{padding:6px 8px;font-size:14px}
       Moving Day
     </div>
     <nav id="nav"></nav>
-    <p class="side-foot">Saved in this browser only. Export a backup in Settings before you switch devices.</p>
+    <p class="side-foot">Free demo: nothing is saved when you close this page. The full version saves everything and has no box limit.</p>
   </aside>
   <main>
     <div class="topbar">
@@ -856,7 +856,7 @@ function settingsModal(){
       <div><label class="lbl" for="sTheme">Appearance</label><select id="sTheme" data-change="theme">${[['auto','Match device'],['light','Light'],['dark','Dark']].map(([v,l])=>`<option value="${v}" ${S.theme===v?'selected':''}>${l}</option>`).join('')}</select></div>
     </div>
     <label class="lbl">Backup</label>
-    <p class="muted small">Everything is stored in this browser only. Export a backup to move it to another device. The backup file contains your addresses, contacts and notes in plain text, so keep it somewhere private.</p>
+    <p class="muted small">${DEMO?"Backups are part of the full version. In the demo, nothing is kept once you close the page.":"Everything is stored in this browser only. Export a backup to move it to another device. The backup file contains your addresses, contacts and notes in plain text, so keep it somewhere private."}</p>
     <div class="row" style="margin-top:9px"><button class="btn" data-act="export">Export backup</button><button class="btn" data-act="import">Import backup</button><button class="btn danger" data-act="reset">Start a new move</button></div>
     <div class="actions"><button class="btn primary" data-act="saveSettings">Save</button></div>`);
 }
