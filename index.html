@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Moving Day – Free Demo</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2214%22 y=%2230%22 width=%2272%22 height=%2252%22 rx=%226%22 fill=%22%23C89B5A%22/><rect x=%2242%22 y=%2230%22 width=%2216%22 height=%2252%22 fill=%22%23A97C3C%22/></svg>">
+<style>
+:root{
+  --bg:#F4F1EA; --surface:#FFFFFF; --surface2:#EAE5DA; --ink:#22303A; --muted:#6B7A85; --line:#DCD6C8;
+  --teal:#137C72; --teal-deep:#0C5C55; --kraft:#C89B5A; --kraft-deep:#A97C3C; --rose:#C2553F; --sky:#4E8FB5;
+  --ok:#2E8B62;
+  --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  --num:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+html[data-theme="dark"]{
+  --bg:#171C20; --surface:#212930; --surface2:#2B343C; --ink:#E9EDEF; --muted:#9BA9B3; --line:#374149;
+  --teal:#2CA294; --teal-deep:#1C7A70; --kraft:#D3A768;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+h1{font-size:clamp(25px,3.4vw,32px)}
+h2{font-size:18px}
+h3{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2.5px solid var(--teal);outline-offset:2px;border-radius:6px}
+[hidden]{display:none!important}
+.muted{color:var(--muted)} .small{font-size:13px} .num{font-family:var(--num);font-variant-numeric:tabular-nums}
+
+.app{display:grid;grid-template-columns:238px 1fr;min-height:100vh}
+aside{position:sticky;top:0;height:100vh;padding:22px 12px;border-right:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 10px;font-weight:800;font-size:19px}
+.brand svg{width:26px;height:26px}
+nav{display:flex;flex-direction:column;gap:2px}
+nav button{display:flex;align-items:center;gap:11px;width:100%;padding:9px 12px;border:0;border-radius:8px;background:none;color:var(--muted);font-weight:600;font-size:15px;text-align:left}
+nav button svg{width:19px;height:19px;flex:none}
+nav button:hover{background:var(--surface2);color:var(--ink)}
+nav button.on{background:var(--teal);color:#fff}
+nav .count{margin-left:auto;font-size:12px;opacity:.75;font-family:var(--num)}
+.side-foot{margin-top:auto;padding:0 10px;font-size:12px;color:var(--muted)}
+main{padding:24px clamp(16px,3.5vw,42px) 110px;max-width:1160px;width:100%}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.route{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--muted);font-size:14px}
+.route b{color:var(--ink)}
+.route svg{width:15px;height:15px;flex:none;vertical-align:-2px;color:var(--muted)}
+.icon-btn{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--muted)}
+.icon-btn:hover{color:var(--ink);border-color:var(--muted)}
+.icon-btn svg{width:18px;height:18px}
+.icon-btn.bare{border:0;background:none;width:30px;height:30px}
+@media (max-width:820px){
+  .app{grid-template-columns:1fr}
+  aside{position:fixed;inset:auto 0 0 0;height:auto;flex-direction:row;padding:5px 5px calc(5px + env(safe-area-inset-bottom));border-right:0;border-top:1px solid var(--line);z-index:30}
+  .brand,.side-foot{display:none}
+  nav{flex-direction:row;overflow-x:auto;width:100%;gap:1px}
+  nav button{flex-direction:column;gap:2px;min-width:64px;padding:6px 5px;font-size:10.5px;text-align:center;justify-content:center}
+  nav .count{display:none}
+}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row.between{justify-content:space-between}
+.page-head{margin-bottom:18px}
+.page-head p{color:var(--muted);margin-top:5px;max-width:62ch}
+
+.btn{border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:8px;font-weight:600;font-size:14.5px}
+.btn:hover{background:var(--surface2)}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.primary:hover{background:var(--teal-deep)}
+.btn.ghost{border-color:transparent;background:none;color:var(--muted)}
+.btn.danger{color:var(--rose)}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+input[type=number]{font-family:var(--num)}
+label.lbl{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 5px}
+.form-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
+.form-grid .wide{grid-column:span 2;min-width:0}
+@media (max-width:620px){.form-grid .wide{grid-column:span 1}}
+
+/* countdown */
+.countdown{background:var(--teal);color:#fff;border:0;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.countdown .days{font:800 clamp(46px,9vw,68px)/1 var(--num);letter-spacing:-.04em}
+.countdown .lbl{text-transform:uppercase;letter-spacing:.1em;font-size:12px;opacity:.85;font-weight:700}
+.countdown .right{text-align:right}
+.countdown .right b{font-size:19px}
+.progress{margin-top:10px}
+.progress .bar{height:9px;border-radius:6px;background:var(--surface2);overflow:hidden;margin-top:6px}
+.progress .bar i{display:block;height:100%;background:var(--teal);border-radius:6px;transition:width .4s}
+.progress .top{display:flex;justify-content:space-between;font-size:13px;font-weight:600}
+.stat b{display:block;font:800 30px var(--num);letter-spacing:-.02em}
+.ring-wrap{display:flex;gap:18px;align-items:center}
+.ring{width:132px;height:132px;flex:none}
+.ring .bg{fill:none;stroke:var(--surface2);stroke-width:13}
+.ring .fg{fill:none;stroke:var(--teal);stroke-width:13;stroke-linecap:round;transition:stroke-dashoffset .6s}
+.ring text{font-family:var(--num);font-weight:800}
+.mini{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-top:1px solid var(--line)}
+.mini:first-child{border-top:0}
+.search{position:relative}
+.search input{padding-left:12px}
+.hit{padding:9px 11px;border-radius:8px;background:var(--surface2);margin-top:7px;font-size:14px}
+.hit b{font-family:var(--num)}
+.sched{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+.sched:first-of-type{border-top:0}
+.sched .tm{flex:none;width:64px;font-family:var(--num);font-weight:700;font-size:14px;color:var(--teal)}
+.sched.done .txt{text-decoration:line-through;color:var(--muted)}
+.fit-ok{background:color-mix(in srgb,var(--ok) 18%,var(--surface));color:var(--ok)}
+.fit-tight{background:color-mix(in srgb,var(--kraft) 30%,var(--surface));color:var(--kraft-deep)}
+.fit-no{background:color-mix(in srgb,var(--rose) 20%,var(--surface));color:var(--rose)}
+.stat span{font-size:13px;color:var(--muted)}
+
+/* lists */
+.item{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+.item .t{flex:1;min-width:0;overflow-wrap:anywhere}
+.item.done .t{text-decoration:line-through;color:var(--muted)}
+.chk{flex:none;width:21px;height:21px;margin-top:1px;border:2px solid var(--line);border-radius:5px;background:none;display:grid;place-items:center;color:#fff}
+.chk:hover{border-color:var(--teal)}
+.item.done .chk{background:var(--teal);border-color:var(--teal)}
+.chk svg{width:13px;height:13px}
+.tag{display:inline-block;padding:2px 8px;border-radius:5px;font-size:11.5px;font-weight:700;background:var(--surface2);color:var(--muted);white-space:nowrap}
+.tag.now{background:var(--teal);color:#fff}
+.tag.fragile{background:color-mix(in srgb,var(--rose) 22%,var(--surface));color:var(--rose)}
+.tag.ok{background:color-mix(in srgb,var(--ok) 20%,var(--surface));color:var(--ok)}
+.tag.warn{background:color-mix(in srgb,var(--kraft) 30%,var(--surface));color:var(--kraft-deep)}
+.phase{margin-bottom:14px}
+.phase-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-bottom:8px;margin-bottom:4px;border-bottom:2px solid var(--line)}
+.phase-head h2{display:flex;align-items:center;gap:8px}
+.empty{padding:16px;border:1.5px dashed var(--line);border-radius:10px;color:var(--muted);text-align:center;font-size:14px}
+
+/* boxes */
+.box-card{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--surface);display:flex;gap:12px;align-items:flex-start}
+.box-num{flex:none;width:44px;height:44px;border-radius:8px;background:var(--kraft);color:#3a2a12;display:grid;place-items:center;font:800 17px var(--num)}
+.box-card.packed .box-num{background:var(--ok);color:#fff}
+.box-body{flex:1;min-width:0}
+.box-body .r{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:3px}
+.boxes{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.pill{border:1px solid var(--line);background:var(--surface);padding:5px 12px;border-radius:20px;font-size:13.5px;font-weight:600}
+.pill.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* tables */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:0 8px 8px;font-weight:700}
+td{padding:9px 8px;border-top:1px solid var(--line);vertical-align:middle}
+td.n{text-align:right;font-family:var(--num)}
+th.n{text-align:right}
+.tbl-wrap{overflow-x:auto}
+tr.chosen td{background:color-mix(in srgb,var(--teal) 9%,var(--surface))}
+td input,td select{padding:6px 8px;font-size:14px}
+.totals{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:2px solid var(--line)}
+.totals div b{display:block;font:800 21px var(--num)}
+.over{color:var(--rose)} .under{color:var(--ok)}
+
+#modal{position:fixed;inset:0;background:rgba(20,28,34,.5);display:grid;place-items:center;padding:16px;z-index:50}
+.sheet{background:var(--surface);border-radius:14px;padding:24px;width:min(480px,100%);max-height:90vh;overflow:auto}
+.sheet h2{font-size:22px;margin-bottom:6px}
+.actions{display:flex;gap:9px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+
+.demo-bar{background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:9px 16px;font-weight:600;font-size:14px;text-align:center}
+.demo-bar a{background:var(--kraft);color:#33240E;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:800}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 17px;border-radius:9px;font-weight:600;z-index:60;max-width:calc(100% - 32px);text-align:center}
+@media (max-width:820px){#toast{bottom:86px}}
+</style>
+</head>
+<body>
+<div class="demo-bar"><span>Free demo: up to 6 boxes, and nothing is saved when you close the page.</span><a href="https://www.etsy.com/shop/KeptApps" target="_blank" rel="noopener">Get the full planner</a></div>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <svg viewBox="0 0 32 32" fill="none"><path d="M4 10.5L16 5l12 5.5v13L16 29 4 23.5z" fill="var(--kraft)"/><path d="M13 7.4v19.9l6 2.2V9.7z" fill="var(--kraft-deep)"/><path d="M4 10.5L16 16l12-5.5" stroke="var(--kraft-deep)" stroke-width="1.6"/></svg>
+      Moving Day
+    </div>
+    <nav id="nav"></nav>
+    <p class="side-foot">Saved in this browser only. Export a backup in Settings before you switch devices.</p>
+  </aside>
+  <main>
+    <div class="topbar">
+      <div class="route" id="route"></div>
+      <div class="row">
+        <button class="icon-btn" data-act="print" title="Print box labels" aria-label="Print box labels"></button>
+        <button class="icon-btn" data-act="settings" title="Settings" aria-label="Settings"></button>
+      </div>
+    </div>
+    <div id="view"></div>
+  </main>
+</div>
+<div id="modal" hidden></div>
+<div id="toast" hidden role="status"></div>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+
+<script>
+(function(){
+'use strict';
+const KEY='moving-day-v1';
+const DEMO=true;
+const $=s=>document.querySelector(s);
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-3);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dkey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today=()=>dkey(new Date());
+const parseD=k=>{const[y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)};
+const fmtDate=k=>k?parseD(k).toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'}):'not set';
+const money=n=>(S.currency||'$')+(Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+const num=v=>{const n=parseFloat(v);return isNaN(n)?0:n};
+
+const P='fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+const I={
+  home:`<svg viewBox="0 0 24 24" ${P}><path d="M3 10.5L12 4l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-7h6v7"/></svg>`,
+  timeline:`<svg viewBox="0 0 24 24" ${P}><path d="M5 3v18M5 7h6M5 13h9M5 19h5"/><circle cx="16" cy="7" r="2"/><circle cx="19" cy="13" r="2"/></svg>`,
+  boxes:`<svg viewBox="0 0 24 24" ${P}><path d="M3 8.5L12 4l9 4.5V17L12 21l-9-4V8.5z"/><path d="M9 6.2v9.6l6 2.6V8.8z"/></svg>`,
+  budget:`<svg viewBox="0 0 24 24" ${P}><rect x="2.5" y="6" width="19" height="13" rx="2"/><path d="M2.5 10h19M6 15h4"/></svg>`,
+  utilities:`<svg viewBox="0 0 24 24" ${P}><path d="M13 2L4.5 13H11l-1 9 8.5-11H12z"/></svg>`,
+  address:`<svg viewBox="0 0 24 24" ${P}><path d="M4 4h13l3 3v13H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>`,
+  contacts:`<svg viewBox="0 0 24 24" ${P}><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>`,
+  newhome:`<svg viewBox="0 0 24 24" ${P}><path d="M3 10.5L12 4l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M12 16.5v-3M10.5 15h3"/></svg>`,
+  dayplan:`<svg viewBox="0 0 24 24" ${P}><circle cx="12" cy="12" r="9"/><path d="M12 7v5.5l3.5 2"/></svg>`,
+  fit:`<svg viewBox="0 0 24 24" ${P}><path d="M3 21L21 3M8 3H3v5M16 21h5v-5"/><path d="M3 3l4.5 4.5M21 21l-4.5-4.5"/></svg>`,
+  settings:`<svg viewBox="0 0 24 24" ${P}><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>`,
+  print:`<svg viewBox="0 0 24 24" ${P}><path d="M7 9V3h10v6M7 19H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><path d="M7 15h10v6H7z"/></svg>`,
+  check:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`,
+  x:`<svg viewBox="0 0 24 24" ${P}><path d="M6 6l12 12M18 6L6 18"/></svg>`,
+  arrow:`<svg viewBox="0 0 24 24" ${P}><path d="M5 12h13M13 6l6 6-6 6"/></svg>`
+};
+const NAV=[['home','Overview'],['timeline','Timeline'],['boxes','Boxes'],['budget','Budget'],['utilities','Utilities'],['dayplan','Move day'],['fit','Will it fit'],['newhome','New home'],['address','Address'],['contacts','Contacts']];
+const PHASES=[
+  ['p8','8+ weeks out',42,99999],['p6','6 weeks out',28,41],['p4','4 weeks out',14,27],
+  ['p2','2 weeks out',7,13],['p1','Move week',1,6],['pd','Moving day',0,0],['pa','After the move',-99999,-1]
+];
+const ROOMS=['Kitchen','Living room','Bedroom','Bathroom','Office','Kids','Garage','Storage','Other'];
+const UTIL_TYPES=['Electricity','Gas','Water','Internet','Phone','Trash','Insurance','Other'];
+const STATUS=['To do','Scheduled','Done'];
+
+const T_DEF=[
+  ['p8','Confirm your moving date'],['p8','Set a moving budget'],['p8','Research moving companies'],['p8','Get at least three quotes'],
+  ['p8','Declutter one room at a time'],['p8','Book time off work'],['p8','Check your notice period or completion date'],['p8','Start a folder for moving documents'],
+  ['p6','Book the movers or hire a truck'],['p6','Order boxes and packing supplies'],['p6','Pack things you rarely use'],
+  ['p6','Measure doorways and the new rooms'],['p6','Request school or nursery record transfers'],['p6','Arrange care for kids or pets on the day'],
+  ['p4','Give written notice to your landlord or agent'],['p4','Book the lift or parking permit'],['p4','Set utility switch dates'],
+  ['p4','Start eating through the freezer'],['p4','Book end-of-tenancy or move-out cleaning'],['p4','Sort the donate and sell pile'],
+  ['p2','Confirm mover details, times and payment'],['p2','Pack room by room, labelling as you go'],['p2','Number every box and log the contents'],
+  ['p2','Back up your computer and photos'],['p2','Refill prescriptions'],['p2','Cancel or transfer local memberships'],
+  ['p1','Pack the essentials box'],['p1','Defrost and clean the fridge'],['p1','Confirm the arrival time and new address'],
+  ['p1','Pack a bag with three days of clothes'],['p1','Photograph cable setups before unplugging'],['p1','Get cash for tips and small costs'],
+  ['pd','Walk through every room and cupboard'],['pd','Take meter readings and photograph them'],['pd','Check all windows and doors are locked'],
+  ['pd','Hand over the keys'],['pd','Photograph any damage'],['pd','Check the truck is completely empty'],
+  ['pa','Check boxes for damage before signing anything'],['pa','Set up the beds first'],['pa','Test the utilities and internet'],
+  ['pa','Work through the change-of-address list'],['pa','Register with a local doctor and dentist'],['pa','Unpack one room a day, not everything at once']
+];
+const U_DEF=[['Electricity','Electricity'],['Gas','Gas'],['Water','Water'],['Internet','Internet'],['Mobile phone','Phone'],['Trash and recycling','Trash'],['Home insurance','Insurance']];
+const A_DEF=[
+  ['Government','Driving licence or ID'],['Government','Voter registration'],['Government','Tax office'],['Government','Post office mail forwarding'],
+  ['Finance','Bank and credit cards'],['Finance','Loans or mortgage'],['Finance','Insurance policies'],['Finance','Pension or investments'],
+  ['Work & school','Employer or HR'],['Work & school','School, college or nursery'],
+  ['Home','Landlord or estate agent'],['Home','Home security or alarm company'],
+  ['Health','Doctor and dentist'],['Health','Pharmacy'],['Health','Vet'],
+  ['Subscriptions','Online shops and deliveries'],['Subscriptions','Streaming services'],['Subscriptions','Gym or clubs']
+];
+const B_DEF=['Movers or truck','Packing supplies','Deposit','First month rent','Utility setup fees','Cleaning','Storage','Travel','New furniture','Contingency'];
+const E_DEF=['Toilet paper and soap','Towels','Phone chargers','Basic tools','Scissors and tape','Bedding for every bed','Kettle, mugs, tea and coffee','Snacks and water','Medication','Cleaning wipes','Plates and cutlery','Torch and spare batteries'];
+const SCHED_DEF=[['07:30','Strip the beds and pack the last bedding'],['08:00','Movers arrive, walk them through the rooms'],['08:15','Point out the fragile boxes and what stays'],['10:00','Check each room and cupboard as it empties'],['12:00','Loading finished, final sweep of the house'],['12:30','Take meter readings and photograph them'],['13:00','Lock up and hand over the keys'],['14:00','Arrive at the new home, check it is clean'],['14:30','Direct boxes to the right rooms as they come in'],['17:00','Check the truck is empty before the movers leave'],['17:30','Set up the beds'],['18:00','Open the essentials box and make a cup of tea']];
+const METER_DEF=['Electricity','Gas','Water'];
+const DOC_DEF=['Passports and ID','Tenancy or sale paperwork','Insurance documents','Birth certificates','School records','Medical records and prescriptions','Vehicle documents','Moving company contract','Keys and spare keys','Chargers and power bank'];
+const NIGHT_DEF=['Find the toilet paper and soap','Plug in and switch on the fridge','Make up every bed','Check the smoke alarms work','Find the fuse box and the water stopcock','Order food, do not attempt to cook','Check every door and window locks','Put a lamp in each room you will use'];
+const WEEK_DEF=['Find the bin and recycling collection days','Register with a doctor and dentist','Locate the nearest pharmacy and supermarket','Update the local council or city registration','Change the locks if you have any doubt','Test the heating and hot water properly','Find the nearest parking rules or permit office','Say hello to the neighbours'];
+const FACT_DEF=['Bin and recycling day','Water stopcock','Fuse box','Boiler or heating controls','Meter locations','Wi-Fi network name','Parking rules','Landlord or agent','Nearest pharmacy','Rubbish tip or recycling centre'];
+const UNPACK_DEF=['Bedrooms','Bathroom','Kitchen','Living room','Everything else'];
+const CURRENCIES=['$','€','£','C$','A$','₹','Rs','R$','kr','CHF','¥','zł'];
+
+function fresh(){
+  const d=new Date(); d.setDate(d.getDate()+45);
+  return {v:1,name:'',fromAddr:'',toAddr:'',moveDate:dkey(d),currency:'$',theme:'auto',onboarded:false,
+    tasks:T_DEF.map(([phase,text])=>({id:uid(),phase,text,done:false})),
+    boxes:[],
+    budget:B_DEF.map(label=>({id:uid(),label,est:0,actual:0})),
+    quotes:[],
+    utilities:U_DEF.map(([name,type])=>({id:uid(),name,type,account:'',off:'',on:'',status:'To do'})),
+    addresses:A_DEF.map(([cat,name])=>({id:uid(),cat,name,done:false})),
+    contacts:[],
+    essentials:E_DEF.map(text=>({id:uid(),text,done:false})),
+    schedule:SCHED_DEF.map(([time,text])=>({id:uid(),time,text,done:false})),
+    meters:METER_DEF.map(name=>({id:uid(),name,old:'',new:''})),
+    documents:DOC_DEF.map(text=>({id:uid(),text,done:false})),
+    fits:[],doorway:'',unit:'cm',
+    firstNight:NIGHT_DEF.map(text=>({id:uid(),text,done:false})),
+    firstWeek:WEEK_DEF.map(text=>({id:uid(),text,done:false})),
+    facts:FACT_DEF.map(k=>({id:uid(),k,v:''})),
+    unpack:UNPACK_DEF.slice()};
+}
+let S;
+function load(){if(DEMO){S=fresh();return}try{const r=localStorage.getItem(KEY);S=r?Object.assign(fresh(),JSON.parse(r)):fresh()}catch(e){S=fresh()}}
+function save(){if(DEMO)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+let view='home', boxFilter='all', tlFilter='all', boxQuery='';
+
+const daysLeft=()=>S.moveDate?Math.round((parseD(S.moveDate)-parseD(today()))/86400000):null;
+const phaseOf=d=>{const p=PHASES.find(([k,l,mn,mx])=>d>=mn&&d<=mx);return p?p[0]:'p8'};
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+const doneCount=a=>a.filter(x=>x.done).length;
+
+/* ---------- pieces ---------- */
+function bar(label,a,b){
+  return `<div class="progress"><div class="top"><span>${label}</span><span class="num">${a}/${b}</span></div>
+    <div class="bar"><i style="width:${pct(a,b)}%"></i></div></div>`;
+}
+function checkItem(list,it,extra){
+  return `<div class="item ${it.done?'done':''}">
+    <button class="chk" data-act="toggle" data-l="${list}" data-id="${it.id}" aria-label="Done">${it.done?I.check:''}</button>
+    <span class="t">${esc(it.text||it.name)}</span>${extra||''}
+    <button class="icon-btn bare" data-act="del" data-l="${list}" data-id="${it.id}" aria-label="Delete">${I.x}</button>
+  </div>`;
+}
+function addRow(list,ph,placeholder,extraAttr){
+  return `<div class="row" style="margin-top:12px;flex-wrap:nowrap">
+    <input type="text" placeholder="${placeholder}" data-enter="${list}" ${extraAttr||''} data-key="${list}-${ph||''}">
+    <button class="btn" data-act="submit">Add</button></div>`;
+}
+
+/* ---------- views ---------- */
+function overallPct(){
+  const parts=[[doneCount(S.tasks),S.tasks.length],[S.boxes.filter(b=>b.packed).length,S.boxes.length],
+    [S.utilities.filter(u=>u.status==='Done').length,S.utilities.length],[doneCount(S.addresses),S.addresses.length],
+    [doneCount(S.essentials),S.essentials.length],[doneCount(S.documents),S.documents.length]].filter(p=>p[1]);
+  if(!parts.length)return 0;
+  return Math.round(parts.reduce((a,p)=>a+p[0]/p[1],0)/parts.length*100);
+}
+function keyDates(){
+  const out=[];
+  if(S.moveDate)out.push([S.moveDate,'Moving day']);
+  S.utilities.forEach(u=>{if(u.off)out.push([u.off,u.name+' off at the old home']);if(u.on)out.push([u.on,u.name+' on at the new home'])});
+  return out.filter(([k])=>k>=today()).sort((a,b)=>a[0].localeCompare(b[0])).slice(0,5);
+}
+function renderHome(){
+  const d=daysLeft(), cur=phaseOf(d===null?60:d);
+  const curLabel=(PHASES.find(p=>p[0]===cur)||[])[1]||'';
+  const tasks=S.tasks, boxes=S.boxes;
+  const estTotal=S.budget.reduce((a,b)=>a+num(b.est),0), actTotal=S.budget.reduce((a,b)=>a+num(b.actual),0);
+  const nowTasks=tasks.filter(t=>t.phase===cur&&!t.done).slice(0,6);
+  const overdue=tasks.filter(t=>!t.done&&PHASES.findIndex(p=>p[0]===t.phase)<PHASES.findIndex(p=>p[0]===cur));
+  return `
+  <div class="page-head"><h1>${S.name?esc(S.name)+', your move is coming together':'Your move at a glance'}</h1></div>
+  <div class="card countdown">
+    <div><div class="lbl">Days until moving day</div><div class="days">${d===null?'–':d<0?'moved!':d}</div></div>
+    <div class="right"><div class="lbl">Moving day</div><b>${fmtDate(S.moveDate)}</b>
+      <div style="opacity:.85;margin-top:6px;font-size:14px">${esc(S.fromAddr||'Current home')} → ${esc(S.toAddr||'New home')}</div></div>
+  </div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card stat"><b>${doneCount(tasks)}/${tasks.length}</b><span>tasks done</span></div>
+    <div class="card stat"><b>${boxes.filter(b=>b.packed).length}/${boxes.length}</b><span>boxes packed</span></div>
+    <div class="card stat"><b>${money(actTotal)}</b><span>spent of ${money(estTotal)} planned</span></div>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <section class="card">
+      <h2 style="margin-bottom:12px">How far along you are</h2>
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 132 132" role="img" aria-label="${overallPct()} percent complete">
+          <circle class="bg" cx="66" cy="66" r="54"/>
+          <circle class="fg" cx="66" cy="66" r="54" stroke-dasharray="339.3" stroke-dashoffset="${339.3*(1-overallPct()/100)}" transform="rotate(-90 66 66)"/>
+          <text x="66" y="62" text-anchor="middle" font-size="26" fill="currentColor">${overallPct()}%</text>
+          <text x="66" y="82" text-anchor="middle" font-size="11" fill="var(--muted)">done</text>
+        </svg>
+        <div style="flex:1;min-width:0">
+          ${bar('Timeline tasks',doneCount(S.tasks),S.tasks.length)}
+          ${bar('Boxes packed',S.boxes.filter(b=>b.packed).length,S.boxes.length||0)}
+          ${bar('Utilities sorted',S.utilities.filter(u=>u.status==='Done').length,S.utilities.length)}
+        </div>
+      </div>
+    </section>
+    <section class="card">
+      <h2 style="margin-bottom:10px">Key dates coming up</h2>
+      ${keyDates().length?keyDates().map(([k,t])=>`<div class="mini"><span>${esc(t)}</span><span class="muted num">${fmtDate(k)}</span></div>`).join('')
+        :'<div class="empty">Set utility switch dates and they will show up here.</div>'}
+    </section>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <section class="card">
+      <div class="row between" style="margin-bottom:8px"><h2>Right now: ${curLabel}</h2><span class="tag now">${d===null?'':d<0?'after the move':d+' days'}</span></div>
+      ${nowTasks.length?nowTasks.map(t=>checkItem('tasks',t)).join(''):'<div class="empty">Nothing left in this stage. Nice work.</div>'}
+      ${overdue.length?`<p class="small" style="margin-top:12px;color:var(--rose)"><b>${overdue.length}</b> task${overdue.length>1?'s':''} still open from earlier stages.</p>`:''}
+      <div class="row" style="margin-top:12px"><button class="btn" data-act="go" data-v="timeline">Open the timeline</button></div>
+    </section>
+    <section class="card">
+      <h2 style="margin-bottom:10px">Packing by room</h2>
+      ${[...new Set(S.boxes.map(b=>b.room))].map(r=>{
+        const list=S.boxes.filter(b=>b.room===r);
+        return bar(r,list.filter(b=>b.packed).length,list.length);
+      }).join('')||'<div class="empty">Add boxes and each room fills in here.</div>'}
+      <div style="margin-top:12px">${bar('Essentials box',doneCount(S.essentials),S.essentials.length)}${bar('Documents to carry',doneCount(S.documents),S.documents.length)}${bar('Address changes',doneCount(S.addresses),S.addresses.length)}</div>
+    </section>
+  </div>
+  <section class="card" style="margin-top:14px">
+    <h2>Where is it?</h2>
+    <p class="muted small" style="margin:4px 0 10px">Search everything you packed. Handy before the move, a lifesaver after it.</p>
+    <div class="row" style="flex-wrap:nowrap">
+      <input type="text" placeholder="Kettle, passports, phone charger" value="${esc(boxQuery)}" data-input="boxQuery" data-key="find">
+    </div>
+    ${boxQuery?(function(){
+      const q=boxQuery.toLowerCase();
+      const hits=S.boxes.filter(b=>(b.items||'').toLowerCase().includes(q)||b.room.toLowerCase().includes(q));
+      return hits.length?hits.map(b=>`<div class="hit"><b>Box #${b.n}</b> · ${esc(b.room)}${b.packed?' · packed':''} — ${esc(b.items||'')}</div>`).join('')
+        :'<div class="hit muted">Nothing packed matches that yet.</div>';
+    })():''}
+  </section>`;
+}
+
+function renderTimeline(){
+  const d=daysLeft(), cur=phaseOf(d===null?60:d);
+  return `
+  <div class="page-head"><h1>Timeline</h1><p>Everything in the order it needs doing. Tick as you go, and add your own tasks to any stage.</p></div>
+  <div class="filters">
+    <button class="pill ${tlFilter==='all'?'on':''}" data-act="tlFilter" data-f="all">All stages</button>
+    <button class="pill ${tlFilter==='open'?'on':''}" data-act="tlFilter" data-f="open">Open only</button>
+    <button class="pill ${tlFilter==='now'?'on':''}" data-act="tlFilter" data-f="now">This stage</button>
+  </div>
+  ${PHASES.filter(([k])=>tlFilter!=='now'||k===cur).map(([k,label])=>{
+    let list=S.tasks.filter(t=>t.phase===k);
+    if(tlFilter==='open') list=list.filter(t=>!t.done);
+    const total=S.tasks.filter(t=>t.phase===k).length, done=S.tasks.filter(t=>t.phase===k&&t.done).length;
+    return `<section class="card phase">
+      <div class="phase-head"><h2>${label} ${k===cur?'<span class="tag now">you are here</span>':''}</h2><span class="muted small num">${done}/${total}</span></div>
+      ${list.length?list.map(t=>checkItem('tasks',t)).join(''):'<div class="empty">Nothing here.</div>'}
+      ${addRow('tasks',k,'Add your own task',`data-phase="${k}"`)}
+    </section>`;
+  }).join('')}`;
+}
+
+function renderBoxes(){
+  const rooms=[...new Set(S.boxes.map(b=>b.room))];
+  let list=S.boxes;
+  if(boxQuery){const q=boxQuery.toLowerCase();list=list.filter(b=>(b.items||'').toLowerCase().includes(q)||b.room.toLowerCase().includes(q))}
+  if(boxFilter==='packed') list=list.filter(b=>b.packed);
+  else if(boxFilter==='first') list=list.filter(b=>b.first);
+  else if(boxFilter==='open') list=list.filter(b=>!b.packed);
+  else if(boxFilter!=='all') list=list.filter(b=>b.room===boxFilter);
+  return `
+  <div class="page-head"><h1>Box inventory</h1><p>Number every box and write down what's in it. This is the page that stops you opening nine boxes at midnight looking for the kettle.</p></div>
+  <div class="grid g2">
+    <section class="card">
+      <h2>Add a box</h2>
+      <div class="form-grid" style="margin-top:8px">
+        <div><label class="lbl" for="bRoom">Room</label><select id="bRoom">${ROOMS.map(r=>`<option>${r}</option>`).join('')}</select></div>
+        <div class="wide"><label class="lbl" for="bItems">What's inside</label><input type="text" id="bItems" placeholder="Plates, mugs, cutlery"></div>
+        <div><label class="lbl" for="bValue">Value (optional)</label><input type="number" id="bValue" step="0.01" placeholder="0"></div>
+      </div>
+      <div class="row between" style="margin-top:12px">
+        <div class="row" style="gap:14px">
+          <label class="row" style="gap:7px;font-weight:600;font-size:14px"><input type="checkbox" id="bFragile" style="width:17px;height:17px"> Fragile</label>
+          <label class="row" style="gap:7px;font-weight:600;font-size:14px"><input type="checkbox" id="bFirst" style="width:17px;height:17px"> Open first</label>
+        </div>
+        <div class="row"><button class="btn" data-act="printLabels">Print labels</button><button class="btn primary" data-act="addBox">Add box</button></div>
+      </div>
+      ${DEMO?'<p class="muted small" style="margin-top:10px"><b>Demo:</b> 6 boxes max, and nothing is saved when you close this page.</p>':''}
+      <p class="muted small" style="margin-top:10px">Boxes are numbered automatically. Write the number on all four sides and the top.</p>
+    </section>
+    <section class="card">
+      <h2>Essentials box</h2>
+      <p class="muted small" style="margin:4px 0 10px">The box you open first. Keep it with you, not in the truck.</p>
+      ${S.essentials.map(e=>checkItem('essentials',e)).join('')}
+      ${addRow('essentials','','Add an essential')}
+    </section>
+  </div>
+  <div class="row" style="margin-top:18px;flex-wrap:nowrap">
+    <input type="text" placeholder="Search box contents" value="${esc(boxQuery)}" data-input="boxQuery" data-key="boxsearch">
+    ${boxQuery?'<button class="btn" data-act="clearSearch">Clear</button>':''}
+  </div>
+  <div class="filters" style="margin-top:12px">
+    <button class="pill ${boxFilter==='all'?'on':''}" data-act="boxFilter" data-f="all">All (${S.boxes.length})</button>
+    <button class="pill ${boxFilter==='first'?'on':''}" data-act="boxFilter" data-f="first">Open first</button>
+    <button class="pill ${boxFilter==='open'?'on':''}" data-act="boxFilter" data-f="open">Not packed</button>
+    <button class="pill ${boxFilter==='packed'?'on':''}" data-act="boxFilter" data-f="packed">Packed</button>
+    ${rooms.map(r=>`<button class="pill ${boxFilter===r?'on':''}" data-act="boxFilter" data-f="${esc(r)}">${esc(r)}</button>`).join('')}
+  </div>
+  ${S.boxes.length?`<p class="small muted" style="margin-bottom:10px">${S.boxes.length} boxes · ${S.boxes.filter(b=>b.fragile).length} fragile · declared value ${money(S.boxes.reduce((a,b)=>a+num(b.value),0))}</p>`:''}
+  ${list.length?`<div class="boxes">${list.map(b=>`<div class="box-card ${b.packed?'packed':''}">
+    <div class="box-num">${b.n}</div>
+    <div class="box-body">
+      <div class="r"><b>${esc(b.room)}</b>${b.fragile?'<span class="tag fragile">Fragile</span>':''}${b.first?'<span class="tag warn">Open first</span>':''}${b.packed?'<span class="tag ok">Packed</span>':''}</div>
+      <div class="small muted">${esc(b.items||'No contents listed')}</div>
+      ${num(b.value)?`<div class="small muted num" style="margin-top:3px">${money(num(b.value))}</div>`:''}
+    </div>
+    <div class="row" style="gap:2px">
+      <button class="icon-btn bare" data-act="packBox" data-id="${b.id}" title="${b.packed?'Mark as not packed':'Mark as packed'}">${I.check}</button>
+      <button class="icon-btn bare" data-act="delBox" data-id="${b.id}" title="Delete">${I.x}</button>
+    </div></div>`).join('')}</div>`
+  :'<div class="empty">No boxes yet. Add the first one above.</div>'}`;
+}
+
+function renderBudget(){
+  const est=S.budget.reduce((a,b)=>a+num(b.est),0), act=S.budget.reduce((a,b)=>a+num(b.actual),0);
+  const diff=est-act;
+  return `
+  <div class="page-head"><h1>Budget and quotes</h1><p>Compare removal quotes, then track what you planned to spend against what you actually spent.</p></div>
+  <section class="card">
+    <div class="row between" style="margin-bottom:10px"><h2>Removal quotes</h2><span class="muted small">Tap a row's star to mark the one you chose</span></div>
+    <div class="tbl-wrap"><table>
+      <tr><th></th><th>Company</th><th class="n">Quote</th><th>Notes</th><th></th></tr>
+      ${S.quotes.map(q=>`<tr class="${q.chosen?'chosen':''}">
+        <td><button class="icon-btn bare" data-act="chooseQuote" data-id="${q.id}" title="Chosen">${q.chosen?I.check:'○'}</button></td>
+        <td>${esc(q.company)}</td>
+        <td class="n">${money(num(q.price))}</td>
+        <td class="small muted">${esc(q.notes||'')}</td>
+        <td><button class="icon-btn bare" data-act="delQuote" data-id="${q.id}">${I.x}</button></td></tr>`).join('')
+        ||'<tr><td colspan="5" class="muted small">No quotes yet. Three is the number worth getting.</td></tr>'}
+    </table></div>
+    <div class="form-grid" style="margin-top:14px">
+      <div><label class="lbl" for="qCo">Company</label><input type="text" id="qCo" placeholder="Smith Removals"></div>
+      <div><label class="lbl" for="qPrice">Quote</label><input type="number" id="qPrice" placeholder="0" step="0.01"></div>
+      <div class="wide"><label class="lbl" for="qNotes">Notes</label><input type="text" id="qNotes" placeholder="Includes packing, 2 movers"></div>
+      <div><button class="btn primary" style="width:100%" data-act="addQuote">Add quote</button></div>
+    </div>
+  </section>
+  <section class="card" style="margin-top:14px">
+    <h2 style="margin-bottom:10px">Moving costs</h2>
+    <div class="tbl-wrap"><table>
+      <tr><th>Item</th><th class="n">Planned</th><th class="n">Actual</th><th></th></tr>
+      ${S.budget.map(b=>`<tr>
+        <td>${esc(b.label)}</td>
+        <td class="n"><input type="number" step="0.01" value="${b.est||''}" data-change="bEst" data-id="${b.id}" style="max-width:120px;text-align:right"></td>
+        <td class="n"><input type="number" step="0.01" value="${b.actual||''}" data-change="bAct" data-id="${b.id}" style="max-width:120px;text-align:right"></td>
+        <td><button class="icon-btn bare" data-act="delBudget" data-id="${b.id}">${I.x}</button></td></tr>`).join('')}
+    </table></div>
+    ${addRow('budget','','Add a cost line')}
+    <div class="totals">
+      <div><span class="muted small">Planned</span><b>${money(est)}</b></div>
+      <div><span class="muted small">Actual</span><b>${money(act)}</b></div>
+      <div><span class="muted small">${diff>=0?'Left in budget':'Over budget'}</span><b class="${diff>=0?'under':'over'}">${money(Math.abs(diff))}</b></div>
+    </div>
+  </section>`;
+}
+
+function renderUtilities(){
+  const done=S.utilities.filter(u=>u.status==='Done').length;
+  return `
+  <div class="page-head"><h1>Utilities and services</h1><p>Two dates matter for each one: the day it goes off at the old place, and the day it comes on at the new one.</p></div>
+  <section class="card">
+    <div class="row between" style="margin-bottom:10px"><h2>Switch list</h2><span class="muted small num">${done}/${S.utilities.length} done</span></div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Service</th><th>Account</th><th>Off at old home</th><th>On at new home</th><th>Status</th><th></th></tr>
+      ${S.utilities.map(u=>`<tr>
+        <td><b>${esc(u.name)}</b><div class="small muted">${esc(u.type)}</div></td>
+        <td><input type="text" value="${esc(u.account)}" placeholder="Account no." data-change="uAcc" data-id="${u.id}" style="min-width:110px"></td>
+        <td><input type="date" value="${u.off}" data-change="uOff" data-id="${u.id}"></td>
+        <td><input type="date" value="${u.on}" data-change="uOn" data-id="${u.id}"></td>
+        <td><select data-change="uStatus" data-id="${u.id}">${STATUS.map(s=>`<option ${u.status===s?'selected':''}>${s}</option>`).join('')}</select></td>
+        <td><button class="icon-btn bare" data-act="delUtil" data-id="${u.id}">${I.x}</button></td></tr>`).join('')}
+    </table></div>
+    <div class="form-grid" style="margin-top:14px">
+      <div class="wide"><label class="lbl" for="uName">Service</label><input type="text" id="uName" placeholder="Broadband provider"></div>
+      <div><label class="lbl" for="uType">Type</label><select id="uType">${UTIL_TYPES.map(t=>`<option>${t}</option>`).join('')}</select></div>
+      <div><button class="btn primary" style="width:100%" data-act="addUtil">Add service</button></div>
+    </div>
+  </section>`;
+}
+
+function renderAddress(){
+  const cats=[...new Set(S.addresses.map(a=>a.cat))];
+  return `
+  <div class="page-head"><h1>Change of address</h1><p>Work through this in the week after the move. Tick each one as it's updated.</p></div>
+  ${bar('Updated',doneCount(S.addresses),S.addresses.length)}
+  <div class="grid g2" style="margin-top:14px">
+    ${cats.map(c=>{
+      const list=S.addresses.filter(a=>a.cat===c);
+      return `<section class="card">
+        <div class="row between" style="margin-bottom:8px"><h2>${esc(c)}</h2><span class="muted small num">${list.filter(x=>x.done).length}/${list.length}</span></div>
+        ${list.map(a=>checkItem('addresses',a)).join('')}
+      </section>`;
+    }).join('')}
+  </div>
+  <section class="card" style="margin-top:14px">
+    <h2>Add somewhere else</h2>
+    <div class="form-grid" style="margin-top:8px">
+      <div class="wide"><label class="lbl" for="aName">Who needs your new address?</label><input type="text" id="aName" placeholder="Book club, milk delivery"></div>
+      <div><label class="lbl" for="aCat">Group</label><select id="aCat">${[...cats,'Other'].filter((v,i,s)=>s.indexOf(v)===i).map(c=>`<option>${esc(c)}</option>`).join('')}</select></div>
+      <div><button class="btn primary" style="width:100%" data-act="addAddr">Add</button></div>
+    </div>
+  </section>`;
+}
+
+function renderContacts(){
+  return `
+  <div class="page-head"><h1>Contacts</h1><p>Everyone you might need to call on moving day, in one place.</p></div>
+  <div class="grid g2">
+    ${S.contacts.length?S.contacts.map(c=>`<section class="card">
+      <div class="row between"><h2>${esc(c.name)}</h2><button class="icon-btn bare" data-act="delContact" data-id="${c.id}">${I.x}</button></div>
+      <p class="muted small" style="margin-bottom:6px">${esc(c.role||'')}</p>
+      ${c.phone?`<p><b>${esc(c.phone)}</b></p>`:''}
+      ${c.email?`<p class="small muted">${esc(c.email)}</p>`:''}
+      ${c.notes?`<p class="small" style="margin-top:6px">${esc(c.notes)}</p>`:''}
+    </section>`).join(''):'<div class="empty">No contacts yet. Start with the movers and your landlord or agent.</div>'}
+  </div>
+  <section class="card" style="margin-top:14px">
+    <h2>Add a contact</h2>
+    <div class="form-grid" style="margin-top:8px">
+      <div><label class="lbl" for="cName">Name</label><input type="text" id="cName" placeholder="Smith Removals"></div>
+      <div><label class="lbl" for="cRole">Role</label><input type="text" id="cRole" placeholder="Moving company"></div>
+      <div><label class="lbl" for="cPhone">Phone</label><input type="text" id="cPhone" placeholder="Phone number"></div>
+      <div><label class="lbl" for="cEmail">Email</label><input type="text" id="cEmail" placeholder="Email"></div>
+      <div class="wide"><label class="lbl" for="cNotes">Notes</label><input type="text" id="cNotes" placeholder="Arrives 8am, cash on completion"></div>
+      <div><button class="btn primary" style="width:100%" data-act="addContact">Add contact</button></div>
+    </div>
+  </section>`;
+}
+
+function renderDayplan(){
+  return `
+  <div class="page-head"><h1>Moving day</h1><p>The hour-by-hour plan, the readings to take before you leave, and the papers that should stay with you rather than go in the truck.</p></div>
+  <div class="grid g2">
+    <section class="card">
+      <div class="row between" style="margin-bottom:8px"><h2>Run sheet</h2><span class="muted small num">${doneCount(S.schedule)}/${S.schedule.length}</span></div>
+      ${S.schedule.sort((a,b)=>a.time.localeCompare(b.time)).map(x=>`<div class="sched ${x.done?'done':''}">
+        <button class="chk" data-act="toggle" data-l="schedule" data-id="${x.id}" aria-label="Done">${x.done?I.check:''}</button>
+        <span class="tm">${esc(x.time)}</span><span class="txt t">${esc(x.text)}</span>
+        <button class="icon-btn bare" data-act="del" data-l="schedule" data-id="${x.id}">${I.x}</button></div>`).join('')}
+      <div class="form-grid" style="margin-top:12px">
+        <div><label class="lbl" for="schTime">Time</label><input type="text" id="schTime" placeholder="09:00"></div>
+        <div class="wide"><label class="lbl" for="schText">What happens</label><input type="text" id="schText" placeholder="Collect keys from the agent"></div>
+        <div><button class="btn primary" style="width:100%" data-act="addSched">Add</button></div>
+      </div>
+    </section>
+    <div class="grid" style="gap:14px">
+      <section class="card">
+        <h2>Meter readings</h2>
+        <p class="muted small" style="margin:4px 0 10px">Take these on the last day and photograph the meters. It is the cheapest way to win a billing dispute.</p>
+        <div class="tbl-wrap"><table>
+          <tr><th>Meter</th><th>Old home</th><th>New home</th><th></th></tr>
+          ${S.meters.map(m=>`<tr><td><b>${esc(m.name)}</b></td>
+            <td><input type="text" value="${esc(m.old)}" placeholder="Reading" data-change="mOld" data-id="${m.id}"></td>
+            <td><input type="text" value="${esc(m.new)}" placeholder="Reading" data-change="mNew" data-id="${m.id}"></td>
+            <td><button class="icon-btn bare" data-act="delMeter" data-id="${m.id}">${I.x}</button></td></tr>`).join('')}
+        </table></div>
+        <div class="row" style="margin-top:12px;flex-wrap:nowrap"><input type="text" id="mName" placeholder="Another meter"><button class="btn" data-act="addMeter">Add</button></div>
+      </section>
+      <section class="card">
+        <h2>Keep these with you</h2>
+        <p class="muted small" style="margin:4px 0 8px">Papers and valuables that should travel in your bag, not on the truck.</p>
+        ${S.documents.map(d=>checkItem('documents',d)).join('')}
+        ${addRow('documents','','Add something else')}
+      </section>
+    </div>
+  </div>`;
+}
+function renderFit(){
+  const unit=S.unit||'cm', door=num(S.doorway);
+  const verdict=w=>{if(!door||!w)return['','Set a doorway width'];const r=door-w;return r<0?['fit-no','Too wide by '+Math.abs(r).toFixed(1)+unit]:r<3?['fit-tight','Tight, '+r.toFixed(1)+unit+' to spare']:['fit-ok','Fits, '+r.toFixed(1)+unit+' to spare']};
+  return `
+  <div class="page-head"><h1>Will it fit?</h1><p>Measure once now instead of finding out on the stairs. Enter your narrowest doorway, then check each big piece against it.</p></div>
+  <div class="grid g2">
+    <section class="card">
+      <h2>Your narrowest doorway</h2>
+      <div class="form-grid" style="margin-top:8px">
+        <div><label class="lbl" for="fDoor">Width</label><input type="number" id="fDoor" step="0.1" value="${S.doorway||''}" data-change="doorway"></div>
+        <div><label class="lbl" for="fUnit">Units</label><select id="fUnit" data-change="unit">${['cm','in'].map(u=>`<option ${unit===u?'selected':''}>${u}</option>`).join('')}</select></div>
+      </div>
+      <p class="muted small" style="margin-top:10px">Measure the frame itself, not the gap with the door open. Check stairwell turns and lift doors too.</p>
+      <h2 style="margin-top:20px">Add a piece of furniture</h2>
+      <div class="form-grid" style="margin-top:8px">
+        <div class="wide"><label class="lbl" for="fItem">Item</label><input type="text" id="fItem" placeholder="Corner sofa"></div>
+        <div><label class="lbl" for="fW">Width</label><input type="number" id="fW" step="0.1" placeholder="0"></div>
+        <div><label class="lbl" for="fH">Height</label><input type="number" id="fH" step="0.1" placeholder="0"></div>
+        <div><label class="lbl" for="fD">Depth</label><input type="number" id="fD" step="0.1" placeholder="0"></div>
+        <div><button class="btn primary" style="width:100%" data-act="addFit">Add</button></div>
+      </div>
+    </section>
+    <section class="card">
+      <div class="row between" style="margin-bottom:8px"><h2>Your furniture</h2><span class="muted small num">${S.fits.length}</span></div>
+      ${S.fits.length?S.fits.map(f=>{const[cls,txt]=verdict(num(f.w));return `<div class="item">
+        <div class="t"><b>${esc(f.item)}</b><div class="small muted num">${f.w||'?'} × ${f.h||'?'} × ${f.d||'?'} ${unit}</div></div>
+        <span class="tag ${cls}">${txt}</span>
+        <button class="icon-btn bare" data-act="delFit" data-id="${f.id}">${I.x}</button></div>`}).join('')
+      :'<div class="empty">Add the sofa, the fridge, the wardrobe and the bed frame. Those are the four that cause trouble.</div>'}
+    </section>
+  </div>`;
+}
+function renderNewhome(){
+  return `
+  <div class="page-head"><h1>Your new home</h1><p>The part most planners forget. What to do the first night, what to sort in the first week, and where everything in this house actually is.</p></div>
+  <div class="grid g2">
+    <section class="card">
+      <div class="row between" style="margin-bottom:4px"><h2>First night</h2><span class="muted small num">${doneCount(S.firstNight)}/${S.firstNight.length}</span></div>
+      <p class="muted small" style="margin-bottom:10px">Do these eight, then stop. The rest can wait until you have slept.</p>
+      ${S.firstNight.map(x=>checkItem('firstNight',x)).join('')}
+      ${addRow('firstNight','','Add something')}
+    </section>
+    <section class="card">
+      <div class="row between" style="margin-bottom:4px"><h2>First week</h2><span class="muted small num">${doneCount(S.firstWeek)}/${S.firstWeek.length}</span></div>
+      <p class="muted small" style="margin-bottom:10px">The admin that makes a new place feel like home rather than a hotel.</p>
+      ${S.firstWeek.map(x=>checkItem('firstWeek',x)).join('')}
+      ${addRow('firstWeek','','Add something')}
+    </section>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <section class="card">
+      <h2>Where things are in this house</h2>
+      <p class="muted small" style="margin:4px 0 10px">Fill this in once. You will look it up at the worst possible moment.</p>
+      <div class="tbl-wrap"><table>
+        ${S.facts.map(x=>`<tr><td style="width:44%"><b>${esc(x.k)}</b></td>
+          <td><input type="text" value="${esc(x.v)}" placeholder="..." data-change="fact" data-id="${x.id}"></td>
+          <td style="width:40px"><button class="icon-btn bare" data-act="delFact" data-id="${x.id}">${I.x}</button></td></tr>`).join('')}
+      </table></div>
+      <div class="row" style="margin-top:12px;flex-wrap:nowrap"><input type="text" id="factK" placeholder="Something else to note"><button class="btn" data-act="addFact">Add</button></div>
+    </section>
+    <section class="card">
+      <h2>Unpacking order</h2>
+      <p class="muted small" style="margin:4px 0 10px">One room at a time, in an order that makes the house liveable fastest. Move rooms up or down to suit you.</p>
+      ${S.unpack.map((r,i)=>`<div class="item"><span class="tag">${i+1}</span><span class="t">${esc(r)}</span>
+        <button class="icon-btn bare" data-act="upRoom" data-i="${i}" ${i===0?'disabled':''} title="Move up">↑</button>
+        <button class="icon-btn bare" data-act="downRoom" data-i="${i}" ${i===S.unpack.length-1?'disabled':''} title="Move down">↓</button>
+        <button class="icon-btn bare" data-act="delRoom" data-i="${i}">${I.x}</button></div>`).join('')}
+      <div class="row" style="margin-top:12px;flex-wrap:nowrap"><input type="text" id="unpackR" placeholder="Add a room"><button class="btn" data-act="addRoom">Add</button></div>
+      <p class="muted small" style="margin-top:12px">Boxes marked <b>open first</b> come with you in the car: ${S.boxes.filter(b=>b.first).length} so far.</p>
+    </section>
+  </div>`;
+}
+const VIEWS={home:renderHome,dayplan:renderDayplan,fit:renderFit,newhome:renderNewhome,timeline:renderTimeline,boxes:renderBoxes,budget:renderBudget,utilities:renderUtilities,address:renderAddress,contacts:renderContacts};
+function counts(k){
+  if(k==='timeline')return S.tasks.filter(t=>!t.done).length||'';
+  if(k==='boxes')return S.boxes.length||'';
+  if(k==='utilities')return S.utilities.filter(u=>u.status!=='Done').length||'';
+  if(k==='address')return S.addresses.filter(a=>!a.done).length||'';
+  if(k==='contacts')return S.contacts.length||'';
+  if(k==='dayplan')return S.schedule.filter(x=>!x.done).length||'';
+  if(k==='fit')return S.fits.length||'';
+  if(k==='newhome')return (S.firstNight.filter(x=>!x.done).length+S.firstWeek.filter(x=>!x.done).length)||'';
+  return '';
+}
+function render(){
+  $('#nav').innerHTML=NAV.map(([k,l])=>`<button class="${view===k?'on':''}" data-act="go" data-v="${k}">${I[k]}<span>${l}</span>${counts(k)?`<span class="count">${counts(k)}</span>`:''}</button>`).join('');
+  const d=daysLeft();
+  $('#route').innerHTML=`<b>${esc(S.fromAddr||'Current home')}</b> ${I.arrow} <b>${esc(S.toAddr||'New home')}</b> <span class="tag">${d===null?'no date':d<0?'moved':d+' days to go'}</span>`;
+  const active=document.activeElement, key=active&&active.dataset?active.dataset.key:null;
+  $('#view').innerHTML=VIEWS[view]();
+  if(key){const el=document.querySelector(`[data-key="${key}"]`); if(el)el.focus();}
+}
+function go(v){view=v;render();window.scrollTo(0,0)}
+
+/* ---------- printing ---------- */
+function printWin(title,css,body){
+  const w=window.open('','_blank','width=900,height=700');
+  if(!w){toast('Your browser blocked the print window. Allow pop-ups and try again.');return null}
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${title}</title><style>
+    @page{size:A4;margin:12mm}
+    body{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;margin:0;color:#111;font-size:11pt}
+    h1{font-size:19pt;margin:0 0 2mm}
+    h2{font-size:12pt;margin:7mm 0 2mm;border-bottom:1.5px solid #111;padding-bottom:1.5mm}
+    table{width:100%;border-collapse:collapse}
+    th{text-align:left;font-size:8.5pt;text-transform:uppercase;letter-spacing:.3mm;border-bottom:1.5px solid #111;padding:2mm 1.5mm}
+    td{padding:2mm 1.5mm;border-bottom:.3mm solid #bbb;vertical-align:top}
+    .sub{color:#555;margin-bottom:4mm}
+    .box{border:.4mm solid #888;border-radius:2mm;padding:3mm;margin-bottom:3mm}
+    .line{display:inline-block;border-bottom:.4mm solid #444;min-width:38mm}
+    ${css}</style></head><body>${body}
+    <script>window.onload=function(){window.print()}<\/script></body></html>`);
+  w.document.close(); return w;
+}
+function printInventory(){
+  if(!S.boxes.length){toast('Add some boxes first.');return}
+  const rows=S.boxes.map(b=>`<tr><td><b>${b.n}</b></td><td>${esc(b.room)}</td><td>${esc(b.items||'')}</td>
+    <td>${b.fragile?'Fragile':''}${b.fragile&&b.first?', ':''}${b.first?'Open first':''}</td>
+    <td>${num(b.value)?money(num(b.value)):''}</td><td>${b.packed?'Packed':'☐'}</td></tr>`).join('');
+  printWin('Box inventory','',`<h1>Box inventory</h1>
+    <p class="sub">${esc(S.fromAddr||'')} → ${esc(S.toAddr||'')} · ${fmtDate(S.moveDate)} · ${S.boxes.length} boxes · declared value ${money(S.boxes.reduce((a,b)=>a+num(b.value),0))}</p>
+    <table><tr><th>#</th><th>Room</th><th>Contents</th><th>Flags</th><th>Value</th><th>Packed</th></tr>${rows}</table>
+    <p class="sub" style="margin-top:6mm">Signed on delivery: <span class="line"></span> &nbsp; Date: <span class="line"></span></p>`);
+}
+function printRunSheet(){
+  const sched=S.schedule.slice().sort((a,b)=>a.time.localeCompare(b.time))
+    .map(x=>`<tr><td><b>${esc(x.time)}</b></td><td>${esc(x.text)}</td><td>☐</td></tr>`).join('');
+  const contacts=S.contacts.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.role||'')}</td><td>${esc(c.phone||'')}</td></tr>`).join('')
+    ||'<tr><td colspan="3">No contacts saved.</td></tr>';
+  const meters=S.meters.map(m=>`<tr><td><b>${esc(m.name)}</b></td><td>Old: <span class="line"></span></td><td>New: <span class="line"></span></td></tr>`).join('');
+  const docs=S.documents.filter(d=>!d.done).map(d=>`<li>${esc(d.text)}</li>`).join('')||'<li>All packed in your bag.</li>';
+  printWin('Moving day run sheet','ul{margin:2mm 0 0 5mm;padding:0}li{margin-bottom:1mm}',
+    `<h1>Moving day run sheet</h1>
+     <p class="sub">${fmtDate(S.moveDate)} · ${esc(S.fromAddr||'Current home')} → ${esc(S.toAddr||'New home')}</p>
+     <h2>The plan</h2><table>${sched}</table>
+     <h2>Meter readings</h2><table>${meters}</table>
+     <h2>Phone numbers</h2><table>${contacts}</table>
+     <h2>Keep these with you</h2><ul>${docs}</ul>
+     <div class="box" style="margin-top:6mm"><b>Boxes:</b> ${S.boxes.length} total, ${S.boxes.filter(b=>b.fragile).length} fragile.
+     &nbsp;<b>Keys handed over:</b> ☐ &nbsp; <b>Truck checked empty:</b> ☐ &nbsp; <b>Photos of empty rooms:</b> ☐</div>`);
+}
+function printNewHome(){
+  const li=a=>a.map(x=>`<li>${x.done?'☑':'☐'} ${esc(x.text)}</li>`).join('');
+  printWin('New home sheet','ul{margin:2mm 0 0 5mm;padding:0;list-style:none}li{margin-bottom:1.5mm}',
+    `<h1>New home</h1><p class="sub">${esc(S.toAddr||'Your new home')}</p>
+     <h2>First night</h2><ul>${li(S.firstNight)}</ul>
+     <h2>First week</h2><ul>${li(S.firstWeek)}</ul>
+     <h2>Where things are</h2><table>${S.facts.map(x=>`<tr><td style="width:40%"><b>${esc(x.k)}</b></td><td>${esc(x.v)||'<span class="line"></span>'}</td></tr>`).join('')}</table>
+     <h2>Unpacking order</h2><ul>${S.unpack.map((r,i)=>`<li>${i+1}. ${esc(r)}</li>`).join('')}</ul>`);
+}
+function printMenu(){
+  modal(`<h2>Print</h2><p class="muted">Four things worth having on paper when the phone battery dies.</p>
+    <div class="grid" style="gap:10px;margin-top:16px">
+      <button class="btn" data-act="doPrint" data-p="labels" style="text-align:left"><b>Box labels</b> — two per page, with number, room, contents and FRAGILE</button>
+      <button class="btn" data-act="doPrint" data-p="inventory" style="text-align:left"><b>Box inventory</b> — the full list, with a signature line for delivery</button>
+      <button class="btn" data-act="doPrint" data-p="runsheet" style="text-align:left"><b>Moving day run sheet</b> — the plan, meters, phone numbers</button>
+      <button class="btn" data-act="doPrint" data-p="newhome" style="text-align:left"><b>New home sheet</b> — first night, first week and where everything is</button>
+    </div>
+    <div class="actions"><button class="btn ghost" data-act="closeModal">Close</button></div>`);
+}
+/* ---------- print labels ---------- */
+function printLabels(){
+  if(!S.boxes.length){toast('Add some boxes first.');return}
+  const w=window.open('','_blank','width=900,height=700');
+  if(!w){toast('Your browser blocked the print window. Allow pop-ups and try again.');return}
+  const labels=S.boxes.map(b=>`<div class="lb">
+    <div class="hd"><span class="no">#${b.n}</span><span class="rm">${esc(b.room)}</span></div>
+    <div class="it">${esc(b.items||'')}</div>
+    <div class="ft">${b.fragile?'<b class="fr">FRAGILE</b>':'<span></span>'}<span>${esc(S.toAddr||'')}</span></div></div>`).join('');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Box labels</title><style>
+    @page{size:A4;margin:10mm}
+    body{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;margin:0;color:#111}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+    .lb{border:2px solid #111;border-radius:4mm;padding:5mm;height:62mm;display:flex;flex-direction:column;page-break-inside:avoid}
+    .hd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #111;padding-bottom:3mm}
+    .no{font-size:15mm;font-weight:800;line-height:1}
+    .rm{font-size:7mm;font-weight:700;text-transform:uppercase;letter-spacing:.5mm;text-align:right}
+    .it{flex:1;padding-top:3mm;font-size:4.4mm;line-height:1.4}
+    .ft{display:flex;justify-content:space-between;align-items:center;font-size:3.6mm;border-top:1px solid #999;padding-top:2mm}
+    .fr{border:2px solid #111;padding:1mm 3mm;border-radius:2mm;letter-spacing:.5mm}
+    @media print{.no-print{display:none}}
+  </style></head><body>
+  <p class="no-print" style="font-size:13px">Print this page, then tape one label to each box. Two labels per row, A4.</p>
+  <div class="grid">${labels}</div>
+  <script>window.onload=function(){window.print()}<\/script></body></html>`);
+  w.document.close();
+}
+
+/* ---------- modal & toast ---------- */
+function modal(html){const m=$('#modal');m.innerHTML=`<div class="sheet">${html}</div>`;m.hidden=false;const f=m.querySelector('input,button');if(f)f.focus()}
+function closeModal(){const m=$('#modal');m.hidden=true;m.innerHTML=''}
+let tT;function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(tT);tT=setTimeout(()=>t.hidden=true,2600)}
+
+function settingsModal(){
+  modal(`<h2>Move details</h2>
+    <label class="lbl" for="sName">Your name</label><input type="text" id="sName" value="${esc(S.name)}" placeholder="Optional">
+    <label class="lbl" for="sFrom">Moving from</label><input type="text" id="sFrom" value="${esc(S.fromAddr)}" placeholder="12 Old Street, Leeds">
+    <label class="lbl" for="sTo">Moving to</label><input type="text" id="sTo" value="${esc(S.toAddr)}" placeholder="8 New Road, Bristol">
+    <label class="lbl" for="sDate">Moving day</label><input type="date" id="sDate" value="${S.moveDate||''}">
+    <div class="form-grid" style="margin-top:4px">
+      <div><label class="lbl" for="sCur">Currency</label><select id="sCur">${CURRENCIES.map(c=>`<option ${S.currency===c?'selected':''}>${c}</option>`).join('')}</select></div>
+      <div><label class="lbl" for="sTheme">Appearance</label><select id="sTheme" data-change="theme">${[['auto','Match device'],['light','Light'],['dark','Dark']].map(([v,l])=>`<option value="${v}" ${S.theme===v?'selected':''}>${l}</option>`).join('')}</select></div>
+    </div>
+    <label class="lbl">Backup</label>
+    <p class="muted small">Everything is stored in this browser only. Export a backup to move it to another device.</p>
+    <div class="row" style="margin-top:9px"><button class="btn" data-act="export">Export backup</button><button class="btn" data-act="import">Import backup</button><button class="btn danger" data-act="reset">Start a new move</button></div>
+    <div class="actions"><button class="btn primary" data-act="saveSettings">Save</button></div>`);
+}
+function welcomeModal(){
+  modal(`<h2>Let's plan your move</h2>
+    <p class="muted">Two details now and the whole timeline builds itself around your moving day.</p>
+    <label class="lbl" for="wDate">When are you moving?</label><input type="date" id="wDate" value="${S.moveDate}">
+    <label class="lbl" for="wFrom">Moving from</label><input type="text" id="wFrom" placeholder="Current address or city">
+    <label class="lbl" for="wTo">Moving to</label><input type="text" id="wTo" placeholder="New address or city">
+    <div class="actions"><button class="btn primary" data-act="welcome">Start planning</button></div>`);
+}
+
+/* ---------- events ---------- */
+function handleEnter(input){
+  const v=input.value.trim(); if(!v)return;
+  const l=input.dataset.enter;
+  if(l==='tasks') S.tasks.push({id:uid(),phase:input.dataset.phase,text:v,done:false});
+  if(l==='essentials') S.essentials.push({id:uid(),text:v,done:false});
+  if(l==='budget') S.budget.push({id:uid(),label:v,est:0,actual:0});
+  if(l==='documents') S.documents.push({id:uid(),text:v,done:false});
+  if(l==='firstNight') S.firstNight.push({id:uid(),text:v,done:false});
+  if(l==='firstWeek') S.firstWeek.push({id:uid(),text:v,done:false});
+  input.value=''; save(); render();
+}
+document.addEventListener('input',e=>{
+  if(e.target.dataset&&e.target.dataset.input==='boxQuery'){boxQuery=e.target.value;render()}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.enter){e.preventDefault();handleEnter(e.target)}
+  if(e.key==='Escape'&&!$('#modal').hidden&&S.onboarded)closeModal();
+});
+document.addEventListener('change',e=>{
+  const el=e.target,k=el.dataset.change;if(!k)return;
+  const id=el.dataset.id;
+  if(k==='theme'){S.theme=el.value;applyTheme();save();return}
+  if(k==='doorway'){S.doorway=num(el.value);save();render();return}
+  if(k==='unit'){S.unit=el.value;save();render();return}
+  if(k==='fact'){const x=S.facts.find(y=>y.id===id);if(x){x.v=el.value;save()}return}
+  const m=S.meters.find(x=>x.id===id);
+  if(k==='mOld'&&m){m.old=el.value;save();return}
+  if(k==='mNew'&&m){m.new=el.value;save();return}
+  const u=S.utilities.find(x=>x.id===id), b=S.budget.find(x=>x.id===id);
+  if(k==='uAcc'&&u)u.account=el.value;
+  if(k==='uOff'&&u)u.off=el.value;
+  if(k==='uOn'&&u)u.on=el.value;
+  if(k==='uStatus'&&u){u.status=el.value;save();render();return}
+  if(k==='bEst'&&b)b.est=num(el.value);
+  if(k==='bAct'&&b)b.actual=num(el.value);
+  save();
+  if(k==='bEst'||k==='bAct')render();
+});
+$('#importFile').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{
+    const d=JSON.parse(r.result);
+    if(!d||!Array.isArray(d.tasks))throw 0;
+    S=Object.assign(fresh(),d,{onboarded:true});save();applyTheme();closeModal();go('home');toast('Backup imported');
+  }catch(err){toast('That file is not a Moving Day backup.')}e.target.value=''};
+  r.readAsText(f);
+});
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal'&&S.onboarded)closeModal()});
+
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const ds=el.dataset,id=ds.id;
+  if(DEMO&&['export','import','reset'].includes(ds.act)){toast('Backups are part of the full version. Get it on Etsy from KeptApps.');return}
+  switch(ds.act){
+    case 'go':go(ds.v);return;
+    case 'submit':{const i=el.previousElementSibling;if(i)handleEnter(i);return}
+    case 'settings':settingsModal();return;
+    case 'print':printMenu();return;
+    case 'printLabels':printLabels();return;
+    case 'doPrint':closeModal();({labels:printLabels,inventory:printInventory,runsheet:printRunSheet,newhome:printNewHome}[ds.p])();return;
+    case 'clearSearch':boxQuery='';render();return;
+    case 'tlFilter':tlFilter=ds.f;render();return;
+    case 'boxFilter':boxFilter=ds.f;render();return;
+
+    case 'toggle':{const it=S[ds.l].find(x=>x.id===id);if(it)it.done=!it.done;break}
+    case 'del':{
+      const it=S[ds.l].find(x=>x.id===id);
+      if(!it||!confirm('Remove "'+(it.text||it.name)+'"?'))return;
+      S[ds.l]=S[ds.l].filter(x=>x.id!==id);break;
+    }
+    case 'addBox':{
+      const items=$('#bItems').value.trim(), room=$('#bRoom').value;
+      if(DEMO&&S.boxes.length>=6){toast('The demo holds 6 boxes. The full version has no limit.');return}
+      const n=S.boxes.reduce((m,b)=>Math.max(m,b.n),0)+1;
+      S.boxes.push({id:uid(),n,room,items,fragile:$('#bFragile').checked,first:$('#bFirst').checked,value:num($('#bValue').value),packed:false});
+      $('#bItems').value='';$('#bFragile').checked=false;$('#bFirst').checked=false;$('#bValue').value='';
+      toast('Box '+n+' added');break;
+    }
+    case 'packBox':{const b=S.boxes.find(x=>x.id===id);if(b)b.packed=!b.packed;break}
+    case 'delBox':{
+      const b=S.boxes.find(x=>x.id===id);
+      if(!b||!confirm('Delete box '+b.n+'?'))return;
+      S.boxes=S.boxes.filter(x=>x.id!==id);break;
+    }
+    case 'addQuote':{
+      const company=$('#qCo').value.trim();
+      if(!company){toast('Name the company first.');$('#qCo').focus();return}
+      S.quotes.push({id:uid(),company,price:num($('#qPrice').value),notes:$('#qNotes').value.trim(),chosen:false});
+      $('#qCo').value='';$('#qPrice').value='';$('#qNotes').value='';break;
+    }
+    case 'chooseQuote':{
+      const q=S.quotes.find(x=>x.id===id);if(!q)return;
+      const on=!q.chosen;S.quotes.forEach(x=>x.chosen=false);q.chosen=on;
+      if(on){const line=S.budget.find(b=>/movers|truck/i.test(b.label));if(line&&!num(line.est)){line.est=num(q.price);toast('Quote copied into your budget')}}
+      break;
+    }
+    case 'delQuote':S.quotes=S.quotes.filter(x=>x.id!==id);break;
+    case 'delBudget':S.budget=S.budget.filter(x=>x.id!==id);break;
+    case 'addUtil':{
+      const name=$('#uName').value.trim();
+      if(!name){toast('Name the service first.');$('#uName').focus();return}
+      S.utilities.push({id:uid(),name,type:$('#uType').value,account:'',off:'',on:'',status:'To do'});
+      $('#uName').value='';break;
+    }
+    case 'delUtil':S.utilities=S.utilities.filter(x=>x.id!==id);break;
+    case 'addAddr':{
+      const name=$('#aName').value.trim();
+      if(!name){toast('Type a name first.');$('#aName').focus();return}
+      S.addresses.push({id:uid(),cat:$('#aCat').value,name,done:false});
+      $('#aName').value='';break;
+    }
+    case 'addContact':{
+      const name=$('#cName').value.trim();
+      if(!name){toast('Name the contact first.');$('#cName').focus();return}
+      S.contacts.push({id:uid(),name,role:$('#cRole').value.trim(),phone:$('#cPhone').value.trim(),email:$('#cEmail').value.trim(),notes:$('#cNotes').value.trim()});
+      ['#cName','#cRole','#cPhone','#cEmail','#cNotes'].forEach(s=>$(s).value='');break;
+    }
+    case 'delContact':S.contacts=S.contacts.filter(x=>x.id!==id);break;
+    case 'addSched':{
+      const text=$('#schText').value.trim(), time=($('#schTime').value.trim()||'09:00');
+      if(!text){toast('Say what happens first.');$('#schText').focus();return}
+      S.schedule.push({id:uid(),time,text,done:false});
+      $('#schText').value='';$('#schTime').value='';break;
+    }
+    case 'addMeter':{
+      const name=$('#mName').value.trim();
+      if(!name){toast('Name the meter first.');return}
+      S.meters.push({id:uid(),name,old:'',new:''});$('#mName').value='';break;
+    }
+    case 'delMeter':S.meters=S.meters.filter(x=>x.id!==id);break;
+    case 'addFit':{
+      const item=$('#fItem').value.trim();
+      if(!item){toast('Name the item first.');$('#fItem').focus();return}
+      S.fits.push({id:uid(),item,w:num($('#fW').value),h:num($('#fH').value),d:num($('#fD').value)});
+      ['#fItem','#fW','#fH','#fD'].forEach(s=>$(s).value='');break;
+    }
+    case 'delFit':S.fits=S.fits.filter(x=>x.id!==id);break;
+    case 'addFact':{
+      const k=$('#factK').value.trim();
+      if(!k){toast('Type what you want to note first.');return}
+      S.facts.push({id:uid(),k,v:''});$('#factK').value='';break;
+    }
+    case 'delFact':S.facts=S.facts.filter(x=>x.id!==id);break;
+    case 'addRoom':{
+      const r=$('#unpackR').value.trim();
+      if(!r){toast('Name the room first.');return}
+      S.unpack.push(r);$('#unpackR').value='';break;
+    }
+    case 'upRoom':{const i=Number(ds.i);[S.unpack[i-1],S.unpack[i]]=[S.unpack[i],S.unpack[i-1]];break}
+    case 'downRoom':{const i=Number(ds.i);[S.unpack[i+1],S.unpack[i]]=[S.unpack[i],S.unpack[i+1]];break}
+    case 'delRoom':S.unpack.splice(Number(ds.i),1);break;
+
+    case 'saveSettings':
+      S.name=$('#sName').value.trim();S.fromAddr=$('#sFrom').value.trim();S.toAddr=$('#sTo').value.trim();
+      S.moveDate=$('#sDate').value;S.currency=$('#sCur').value;
+      closeModal();break;
+    case 'export':{
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:'application/json'}));
+      a.download='moving-day-backup-'+today()+'.json';
+      document.body.appendChild(a);a.click();a.remove();toast('Backup exported');return;
+    }
+    case 'import':$('#importFile').click();return;
+    case 'reset':
+      if(!confirm('Start a new move? Every task, box, cost and contact will be deleted.'))return;
+      S=fresh();save();applyTheme();closeModal();go('home');welcomeModal();return;
+    case 'welcome':
+      S.moveDate=$('#wDate').value||S.moveDate;
+      S.fromAddr=$('#wFrom').value.trim();S.toAddr=$('#wTo').value.trim();
+      S.onboarded=true;closeModal();break;
+    default:return;
+  }
+  save();render();
+});
+
+function applyTheme(){
+  let t=S.theme;
+  if(t==='auto')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  document.documentElement.dataset.theme=t;
+}
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',applyTheme);
+
+load();applyTheme();
+document.querySelector('[data-act="print"]').innerHTML=I.print;
+document.querySelector('[data-act="settings"]').innerHTML=I.settings;
+render();
+if(!S.onboarded)welcomeModal();
+})();
+</script>
+</body>
+</html>
